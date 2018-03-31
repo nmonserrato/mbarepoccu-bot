@@ -65,6 +65,11 @@ public class MessageResource
 
   private Reply buildReplyForMessage(Message message)
   {
+    if (StringUtils.equalsIgnoreCase(message.text, "we"))
+    {
+      return buildReplyWithRandomText(message, "we dica", "we", "we mbare");
+    }
+
     if (StringUtils.containsIgnoreCase(message.text, "aunni si") ||
         StringUtils.containsIgnoreCase(message.text, "aunni su")){
       return buildReplyWithRandomText(message, "casa tu", "casa as usual...io");

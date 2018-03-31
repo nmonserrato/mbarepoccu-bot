@@ -14,6 +14,14 @@ public class MessageResourceTest
   private final MessageResource messageResource = new MessageResource();
 
   @Test
+  void we()
+  {
+    final Reply reply = messageResource.handle(anIncomingMessage("we"));
+
+    assertReplyIn(reply, "we dica", "we", "we mbare");
+  }
+
+  @Test
   void we_aunni_si()
   {
     final Reply reply1 = messageResource.handle(anIncomingMessage("we aunni si"));
