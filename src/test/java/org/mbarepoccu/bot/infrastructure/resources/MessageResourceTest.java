@@ -56,9 +56,11 @@ public class MessageResourceTest
   {
     final Reply reply1 = messageResource.handle(anIncomingMessage("con chi esci?"));
     final Reply reply2 = messageResource.handle(anIncomingMessage("con"));
+    final Reply reply3 = messageResource.handle(anIncomingMessage("con?"));
 
     assertValidReply(reply1, "tua sorella");
     assertValidReply(reply2, "tua sorella");
+    assertValidReply(reply3, "tua sorella");
   }
 
   @Test

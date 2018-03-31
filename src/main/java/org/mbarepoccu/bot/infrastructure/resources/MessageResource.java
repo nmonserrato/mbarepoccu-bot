@@ -92,7 +92,8 @@ public class MessageResource
     }
 
     if (StringUtils.containsIgnoreCase(message.text, "con chi") ||
-        StringUtils.equalsIgnoreCase(message.text, "con")){
+        StringUtils.equalsIgnoreCase(message.text, "con") ||
+      StringUtils.equalsIgnoreCase(message.text, "con?")){
       return buildReplyWithText(message, "tua sorella");
     }
 
