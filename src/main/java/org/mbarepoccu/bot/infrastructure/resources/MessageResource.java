@@ -25,21 +25,8 @@ public class MessageResource
   }
 
   @RequestMapping(value = "/new-message", method = RequestMethod.POST)
-  public Reply handle(@RequestBody String string) {
-    LOGGER.info("Message Received with body {}", string);
-    try
-    {
-      final Update update = objectMapper.readValue(string, Update.class);
-      return handle(update);
-    }
-    catch (IOException e)
-    {
-      LOGGER.error("Error parsing input update");
-      return null;
-    }
-  }
-
-  Reply handle(Update update) {
+  public Reply handle(@RequestBody Update update) {
+    LOGGER.info("Message Received with body {}", update);
     Reply reply = null;
 
     if(update.message != null)
