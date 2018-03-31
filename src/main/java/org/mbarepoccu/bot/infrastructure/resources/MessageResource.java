@@ -22,7 +22,15 @@ public class MessageResource
       reply.chat_id = update.message.chat.id;
       reply.text = "casa tu";
     }
-    LOGGER.info("Replying with {}", ToStringBuilder.reflectionToString(reply));
+
+    if (update.message.text.contains("piccione")){
+      reply = new Reply();
+      reply.chat_id = update.message.chat.id;
+      reply.text = "non parlo di piccione con te mbare";
+    }
+
+    if(reply != null)
+      LOGGER.info("Replying with {}", ToStringBuilder.reflectionToString(reply));
     return reply;
   }
 
