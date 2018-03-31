@@ -99,6 +99,12 @@ public class MessageResource
       return buildReplyWithRandomText(message, "onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare");
     }
 
+    final int random = RandomUtils.nextInt(0, 10);
+    if (random < 2)
+    {
+      return buildReplyWithSticker(message, "AAQEABPb9mEwAARx-ybry9PwX0oPAAIC");
+    }
+
     return null;
   }
 
@@ -113,6 +119,15 @@ public class MessageResource
     Reply reply = new Reply();
     reply.chat_id = message.chat.id;
     reply.text = text;
+    return reply;
+  }
+
+  private Reply buildReplyWithSticker(Message message, String file_id)
+  {
+    Reply reply = new Reply();
+    reply.chat_id = message.chat.id;
+    reply.sticker = file_id;
+    reply.method = "sendSticker";
     return reply;
   }
 }
@@ -152,6 +167,7 @@ class Reply{
   public String method = "sendMessage";
   public String chat_id;
   public String text;
+  public String sticker;
 
   @Override
   public String toString()

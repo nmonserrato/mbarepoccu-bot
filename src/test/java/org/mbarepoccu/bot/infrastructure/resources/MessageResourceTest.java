@@ -92,6 +92,8 @@ public class MessageResourceTest
     assertNull(reply);
   }
 
+  //TODO test sticker
+
   private void assertValidReply(Reply reply, String text)
   {
     assertNotNull(reply);
