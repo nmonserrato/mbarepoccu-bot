@@ -3,6 +3,7 @@ package org.mbarepoccu.bot.infrastructure.resources;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class MessageResourceTest
 {
@@ -26,6 +27,13 @@ public class MessageResourceTest
     final Reply reply = messageResource.handle(incomingMessage);
 
     assertValidReply(reply, "non parlo di piccione con te mbare");
+  }
+
+  @Test
+  void message_may_be_null()
+  {
+    final Reply reply = messageResource.handle(new Update());
+    assertNull(reply);
   }
 
   private void assertValidReply(Reply reply, String text)
