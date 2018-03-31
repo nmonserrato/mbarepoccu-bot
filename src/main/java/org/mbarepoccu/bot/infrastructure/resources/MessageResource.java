@@ -99,9 +99,25 @@ public class MessageResource
       return buildReplyWithRandomText(message, "onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare");
     }
 
-    if (StringUtils.equalsIgnoreCase(message.text, "test sticker"))
+    if (RandomUtils.nextInt(0, 10) < 2)
     {
-      return buildReplyWithSticker(message, "CAADBAADgAIAAo-zWQNa5qKVuK6KiQI");
+      return buildReplyWithRandomImage(message);
+    }
+
+    return null;
+  }
+
+  private Reply buildReplyWithRandomImage(Message message)
+  {
+    final int index = RandomUtils.nextInt(0, 3);
+    switch (index)
+    {
+      case 0: //XD sticker
+        return buildReplyWithSticker(message, "CAADBQADuQEAAukKyAMFe9CCAAH2HHcC");
+      case 1: //cheers sticker
+        return buildReplyWithSticker(message, "CAADBAADgAIAAo-zWQNa5qKVuK6KiQI");
+      case 2: //cheers GIF
+        return buildReplyWithGIF(message, "CgADBAADE58AAsgeZAc8eTz0lPWp0gI");
     }
 
     return null;
@@ -118,6 +134,7 @@ public class MessageResource
     Reply reply = new Reply();
     reply.chat_id = message.chat.id;
     reply.text = text;
+    reply.method = "sendMessage";
     return reply;
   }
 
@@ -127,6 +144,15 @@ public class MessageResource
     reply.chat_id = message.chat.id;
     reply.sticker = file_id;
     reply.method = "sendSticker";
+    return reply;
+  }
+
+  private Reply buildReplyWithGIF(Message message, String file_id)
+  {
+    Reply reply = new Reply();
+    reply.chat_id = message.chat.id;
+    reply.document = file_id;
+    reply.method = "sendDocument";
     return reply;
   }
 }
@@ -167,6 +193,7 @@ class Reply{
   public String chat_id;
   public String text;
   public String sticker;
+  public String document;
 
   @Override
   public String toString()
