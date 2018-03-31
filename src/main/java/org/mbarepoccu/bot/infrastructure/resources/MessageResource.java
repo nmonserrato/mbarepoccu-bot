@@ -67,7 +67,7 @@ public class MessageResource
   {
     if (StringUtils.containsIgnoreCase(message.text, "aunni si") ||
         StringUtils.containsIgnoreCase(message.text, "aunni su")){
-      return buildReplyWithRandomText(message, "casa tu", "casa as usual. io.");
+      return buildReplyWithRandomText(message, "casa tu", "casa as usual...io");
     }
 
     if (StringUtils.containsIgnoreCase(message.text, "piccione")){
@@ -93,6 +93,10 @@ public class MessageResource
 
     if (StringUtils.containsIgnoreCase(message.text, "why")){
       return buildReplyWithRandomText(message, "eh sapessi mbare", "potessi parlare...");
+    }
+
+    if (StringUtils.containsIgnoreCase(message.text, "valencia")){
+      return buildReplyWithRandomText(message, "onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare");
     }
 
     return null;

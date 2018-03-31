@@ -19,8 +19,8 @@ public class MessageResourceTest
     final Reply reply1 = messageResource.handle(anIncomingMessage("we aunni si"));
     final Reply reply2 = messageResource.handle(anIncomingMessage("aunni su"));
 
-    assertReplyIn(reply1, "casa tu", "casa as usual. io.");
-    assertReplyIn(reply2, "casa tu", "casa as usual. io.");
+    assertReplyIn(reply1, "casa tu", "casa as usual...io");
+    assertReplyIn(reply2, "casa tu", "casa as usual...io");
   }
 
   @Test
@@ -31,6 +31,16 @@ public class MessageResourceTest
     final Reply reply = messageResource.handle(incomingMessage);
 
     assertValidReply(reply, "non parlo di piccione con te mbare");
+  }
+
+  @Test
+  void valencia()
+  {
+    final Update incomingMessage = anIncomingMessage("valencia");
+
+    final Reply reply = messageResource.handle(incomingMessage);
+
+    assertReplyIn(reply, "onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare");
   }
 
   @Test
