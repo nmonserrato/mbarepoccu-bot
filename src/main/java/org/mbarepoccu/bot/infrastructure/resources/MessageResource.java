@@ -19,8 +19,8 @@ public class MessageResource
     LOGGER.info("Message Received with body {}!", body);
   }
 
-  @RequestMapping(value = "/STATUS", method = RequestMethod.GET)
+  @RequestMapping(value = "/status", method = RequestMethod.GET)
   public String status() {
-    return "mbarepoccubot: 1.0.0-SNAPSHOT";
+    return "mbarepoccu-bot: 1.0.0-SNAPSHOT";
   }
 }
