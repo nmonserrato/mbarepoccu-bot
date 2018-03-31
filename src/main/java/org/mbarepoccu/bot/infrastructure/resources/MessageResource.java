@@ -1,5 +1,6 @@
 package org.mbarepoccu.bot.infrastructure.resources;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -10,10 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 public class MessageResource
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(MessageResource.class);
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @RequestMapping(value = "/status", method = RequestMethod.GET)
   public String status() {
@@ -21,13 +25,25 @@ public class MessageResource
   }
 
   @RequestMapping(value = "/new-message", method = RequestMethod.POST)
-  public Reply handle(@RequestBody Update update) {
-    LOGGER.info("Message Received with body {}", ToStringBuilder.reflectionToString(update));
+  public Reply handle(@RequestBody String string) {
+    LOGGER.info("Message Received with body {}", string);
+    try
+    {
+      final Update update = objectMapper.readValue(string, Update.class);
+      return handle(update);
+    }
+    catch (IOException e)
+    {
+      LOGGER.error("Error parsing input update");
+      return null;
+    }
+  }
 
+  Reply handle(Update update) {
     Reply reply = null;
 
     if(update.message != null)
-     reply = buildReplyForUpdate(update.message);;
+     reply = buildReplyForMessage(update.message);;
 
     if(reply != null)
       LOGGER.info("Replying with {}", ToStringBuilder.reflectionToString(reply));
@@ -35,7 +51,7 @@ public class MessageResource
     return reply;
   }
 
-  private Reply buildReplyForUpdate(Message message)
+  private Reply buildReplyForMessage(Message message)
   {
     if (StringUtils.containsIgnoreCase(message.text, "aunni si") ||
         StringUtils.containsIgnoreCase(message.text, "aunni su")){
