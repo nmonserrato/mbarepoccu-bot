@@ -1,13 +1,12 @@
 package org.mbarepoccu.bot.infrastructure.resources;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 public class MessageResource
@@ -16,13 +15,14 @@ public class MessageResource
 
   @RequestMapping(value = "/new-message", method = RequestMethod.POST)
   public Reply handle(@RequestBody Update update) {
-    LOGGER.info("Message Received with body {}", update);
+    LOGGER.info("Message Received with body {}", ToStringBuilder.reflectionToString(update));
     Reply reply = null;
     if (update.message.text.equalsIgnoreCase("we aunni si")){
       reply = new Reply();
       reply.chat_id = update.message.chat.id;
       reply.text = "casa tu";
     }
+    LOGGER.info("Replying with {}", ToStringBuilder.reflectionToString(reply));
     return reply;
   }
 
@@ -46,6 +46,7 @@ class Update {
 }
 
 class Reply{
+  public String method = "sendMessage";
   public String chat_id;
   public String text;
 }
