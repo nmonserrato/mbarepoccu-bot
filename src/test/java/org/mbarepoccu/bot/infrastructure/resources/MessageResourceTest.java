@@ -12,11 +12,11 @@ public class MessageResourceTest
   @Test
   void we_aunni_si()
   {
-    final Update incomingMessage = anIncomingMessage("we aunni si");
+    final Reply reply1 = messageResource.handle(anIncomingMessage("we aunni si"));
+    final Reply reply2 = messageResource.handle(anIncomingMessage("aunni su"));
 
-    final Reply reply = messageResource.handle(incomingMessage);
-
-    assertValidReply(reply, "casa tu");
+    assertValidReply(reply1, "casa tu");
+    assertValidReply(reply2, "casa tu");
   }
 
   @Test
@@ -27,6 +27,16 @@ public class MessageResourceTest
     final Reply reply = messageResource.handle(incomingMessage);
 
     assertValidReply(reply, "non parlo di piccione con te mbare");
+  }
+
+  @Test
+  void tua_sorella()
+  {
+    final Reply reply1 = messageResource.handle(anIncomingMessage("con chi esci?"));
+    final Reply reply2 = messageResource.handle(anIncomingMessage("con"));
+
+    assertValidReply(reply1, "tua sorella");
+    assertValidReply(reply2, "tua sorella");
   }
 
   @Test

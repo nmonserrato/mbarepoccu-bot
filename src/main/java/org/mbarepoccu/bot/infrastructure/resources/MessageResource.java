@@ -1,5 +1,6 @@
 package org.mbarepoccu.bot.infrastructure.resources;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,11 @@ public class MessageResource
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(MessageResource.class);
 
+  @RequestMapping(value = "/status", method = RequestMethod.GET)
+  public String status() {
+    return "mbarepoccu-bot: 1.0.0-SNAPSHOT";
+  }
+
   @RequestMapping(value = "/new-message", method = RequestMethod.POST)
   public Reply handle(@RequestBody Update update) {
     LOGGER.info("Message Received with body {}", ToStringBuilder.reflectionToString(update));
@@ -20,7 +26,7 @@ public class MessageResource
     Reply reply = null;
 
     if(update.message != null)
-     reply = buildReplyForUpdate(update.message.text, update.message.chat.id);;
+     reply = buildReplyForUpdate(update.message);;
 
     if(reply != null)
       LOGGER.info("Replying with {}", ToStringBuilder.reflectionToString(reply));
@@ -28,27 +34,32 @@ public class MessageResource
     return reply;
   }
 
-  private Reply buildReplyForUpdate(String inputMessageText, String chatId)
+  private Reply buildReplyForUpdate(Message message)
   {
-    if (inputMessageText.equalsIgnoreCase("we aunni si")){
-      Reply reply = new Reply();
-      reply.chat_id = chatId;
-      reply.text = "casa tu";
-      return reply;
+    //TODO handle aunni su typo
+    if (StringUtils.containsIgnoreCase(message.text, "aunni si") ||
+        StringUtils.containsIgnoreCase(message.text, "aunni su")){
+      return buildReplyWithText(message, "casa tu");
     }
-    if (inputMessageText.contains("piccione")){
-      Reply reply = new Reply();
-      reply.chat_id = chatId;
-      reply.text = "non parlo di piccione con te mbare";
-      return reply;
+
+    if (StringUtils.containsIgnoreCase(message.text, "piccione")){
+      return buildReplyWithText(message, "non parlo di piccione con te mbare");
+    }
+
+    if (StringUtils.containsIgnoreCase(message.text, "con chi") ||
+        StringUtils.equalsIgnoreCase(message.text, "con")){
+      return buildReplyWithText(message, "tua sorella");
     }
 
     return null;
   }
 
-  @RequestMapping(value = "/status", method = RequestMethod.GET)
-  public String status() {
-    return "mbarepoccu-bot: 1.0.0-SNAPSHOT";
+  private Reply buildReplyWithText(Message message, String text)
+  {
+    Reply reply = new Reply();
+    reply.chat_id = message.chat.id;
+    reply.text = text;
+    return reply;
   }
 }
 
