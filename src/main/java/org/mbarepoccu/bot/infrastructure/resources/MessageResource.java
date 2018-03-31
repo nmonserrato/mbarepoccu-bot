@@ -99,10 +99,9 @@ public class MessageResource
       return buildReplyWithRandomText(message, "onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare");
     }
 
-    final int random = RandomUtils.nextInt(0, 10);
-    if (random < 2)
+    if (StringUtils.equalsIgnoreCase(message.text, "test sticker"))
     {
-      return buildReplyWithSticker(message, "AAQEABPb9mEwAARx-ybry9PwX0oPAAIC");
+      return buildReplyWithSticker(message, "CAADBAADgAIAAo-zWQNa5qKVuK6KiQI");
     }
 
     return null;
