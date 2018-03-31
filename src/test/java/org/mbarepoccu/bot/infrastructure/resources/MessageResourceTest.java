@@ -3,6 +3,7 @@ package org.mbarepoccu.bot.infrastructure.resources;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class MessageResourceTest
@@ -40,6 +41,30 @@ public class MessageResourceTest
   }
 
   @Test
+  void news()
+  {
+    final Reply reply = messageResource.handle(anIncomingMessage("we news"));
+
+    assertValidReply(reply, "nada tu");
+  }
+
+  @Test
+  void fifa()
+  {
+    final Reply reply = messageResource.handle(anIncomingMessage("fifa"));
+
+    assertValidReply(reply, "non mi va mbare. EA sports merda!");
+  }
+
+  @Test
+  void aunni_vai()
+  {
+    final Reply reply = messageResource.handle(anIncomingMessage("aunni vai"));
+
+    assertValidReply(reply, "eh sapessi mbare");
+  }
+
+  @Test
   void message_may_be_null()
   {
     final Reply reply = messageResource.handle(new Update());
@@ -48,6 +73,7 @@ public class MessageResourceTest
 
   private void assertValidReply(Reply reply, String text)
   {
+    assertNotNull(reply);
     assertEquals(text, reply.text);
     assertEquals("aChatId", reply.chat_id);
     assertEquals("sendMessage", reply.method);

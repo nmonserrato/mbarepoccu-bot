@@ -1,6 +1,8 @@
 package org.mbarepoccu.bot.infrastructure.resources;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,7 +19,16 @@ import java.io.IOException;
 public class MessageResource
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(MessageResource.class);
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper(){{
+    enable(SerializationFeature.INDENT_OUTPUT);
+    enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+    disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);
+    disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
+    disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
+    disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
+  }};
 
   @RequestMapping(value = "/status", method = RequestMethod.GET)
   public String status() {
@@ -25,8 +36,21 @@ public class MessageResource
   }
 
   @RequestMapping(value = "/new-message", method = RequestMethod.POST)
-  public Reply handle(@RequestBody Update update) {
-    LOGGER.info("Message Received with body {}", update);
+  public Reply handle(@RequestBody String string) {
+    LOGGER.info("Message Received with body {}", string);
+    try
+    {
+      final Update update = objectMapper.readValue(string, Update.class);
+      return handle(update);
+    }
+    catch (IOException e)
+    {
+      LOGGER.error("Error parsing input update");
+      return null;
+    }
+  }
+
+  Reply handle(Update update) {
     Reply reply = null;
 
     if(update.message != null)
@@ -52,6 +76,18 @@ public class MessageResource
     if (StringUtils.containsIgnoreCase(message.text, "con chi") ||
         StringUtils.equalsIgnoreCase(message.text, "con")){
       return buildReplyWithText(message, "tua sorella");
+    }
+
+    if (StringUtils.containsIgnoreCase(message.text, "aunni vai")){
+      return buildReplyWithText(message, "eh sapessi mbare");
+    }
+
+    if (StringUtils.containsIgnoreCase(message.text, "fifa")){
+      return buildReplyWithText(message, "non mi va mbare. EA sports merda!");
+    }
+
+    if (StringUtils.containsIgnoreCase(message.text, "news")){
+      return buildReplyWithText(message, "nada tu");
     }
 
     return null;
