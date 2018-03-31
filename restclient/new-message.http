@@ -2,7 +2,23 @@ POST http://{{base-url}}//new-message
 Content-Type: application/json
 
 {
-  "message": "Hello world!"
+	"update_id": "512650892",
+	"message": {
+		"message_id": 58,
+		"from": {
+			"id": "8588218",
+			"is_bot": false,
+			"first_name": "Nino",
+			"language_code": "en-US"
+		},
+		"chat":{
+			"id":"8588218",
+			"first_name": "Nino",
+			"type": "private"
+		},
+		"date": 1522510390,
+		"text": "we aunni si"
+	}
 }
 
 ###

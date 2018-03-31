@@ -15,12 +15,37 @@ public class MessageResource
   private static final Logger LOGGER = LoggerFactory.getLogger(MessageResource.class);
 
   @RequestMapping(value = "/new-message", method = RequestMethod.POST)
-  public void handle(@RequestBody Map<String, Object> body) {
-    LOGGER.info("Message Received with body {}!", body);
+  public Reply handle(@RequestBody Update update) {
+    LOGGER.info("Message Received with body {}", update);
+    Reply reply = null;
+    if (update.message.text.equalsIgnoreCase("we aunni si")){
+      reply = new Reply();
+      reply.chat_id = update.message.chat.id;
+      reply.text = "casa tu";
+    }
+    return reply;
   }
 
   @RequestMapping(value = "/status", method = RequestMethod.GET)
   public String status() {
     return "mbarepoccu-bot: 1.0.0-SNAPSHOT";
   }
+}
+
+class Chat {
+  public String id;
+}
+
+class Message {
+  public String text;
+  public Chat chat;
+}
+
+class Update {
+    public Message message;
+}
+
+class Reply{
+  public String chat_id;
+  public String text;
 }
