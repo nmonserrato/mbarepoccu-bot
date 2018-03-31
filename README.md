@@ -1,0 +1,1 @@
+Example bot for telegram
