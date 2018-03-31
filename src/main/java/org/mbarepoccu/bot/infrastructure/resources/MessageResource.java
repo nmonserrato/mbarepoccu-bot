@@ -2,6 +2,7 @@ package org.mbarepoccu.bot.infrastructure.resources;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,6 @@ public class MessageResource
 
   private Reply buildReplyForUpdate(Message message)
   {
-    //TODO handle aunni su typo
     if (StringUtils.containsIgnoreCase(message.text, "aunni si") ||
         StringUtils.containsIgnoreCase(message.text, "aunni su")){
       return buildReplyWithText(message, "casa tu");
@@ -69,7 +69,7 @@ class Chat {
   @Override
   public String toString()
   {
-    return ToStringBuilder.reflectionToString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 }
 
@@ -80,7 +80,7 @@ class Message {
   @Override
   public String toString()
   {
-    return ToStringBuilder.reflectionToString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 }
 
@@ -90,7 +90,7 @@ class Update {
   @Override
   public String toString()
   {
-    return ToStringBuilder.reflectionToString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 }
 
@@ -102,6 +102,6 @@ class Reply{
   @Override
   public String toString()
   {
-    return ToStringBuilder.reflectionToString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 }
