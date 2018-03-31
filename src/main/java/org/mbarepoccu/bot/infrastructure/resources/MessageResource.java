@@ -42,7 +42,9 @@ public class MessageResource
     try
     {
       final Update update = objectMapper.readValue(string, Update.class);
-      return handle(update);
+      final Reply reply = handle(update);
+      sleep();
+      return reply;
     }
     catch (IOException e)
     {
@@ -61,6 +63,16 @@ public class MessageResource
       LOGGER.info("Replying with {}", ToStringBuilder.reflectionToString(reply));
 
     return reply;
+  }
+
+  private void sleep()
+  {
+    final long delay = RandomUtils.nextLong(1000, 5000);
+    try
+    {
+      Thread.sleep(delay);
+    }
+    catch (InterruptedException e) { }
   }
 
   private Reply buildReplyForMessage(Message message)
