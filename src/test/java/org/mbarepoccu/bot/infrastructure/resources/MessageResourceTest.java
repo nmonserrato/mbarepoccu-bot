@@ -2,9 +2,12 @@ package org.mbarepoccu.bot.infrastructure.resources;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MessageResourceTest
 {
@@ -16,8 +19,8 @@ public class MessageResourceTest
     final Reply reply1 = messageResource.handle(anIncomingMessage("we aunni si"));
     final Reply reply2 = messageResource.handle(anIncomingMessage("aunni su"));
 
-    assertValidReply(reply1, "casa tu");
-    assertValidReply(reply2, "casa tu");
+    assertReplyIn(reply1, "casa tu", "casa as usual. io.");
+    assertReplyIn(reply2, "casa tu", "casa as usual. io.");
   }
 
   @Test
@@ -53,7 +56,7 @@ public class MessageResourceTest
   {
     final Reply reply = messageResource.handle(anIncomingMessage("fifa"));
 
-    assertValidReply(reply, "non mi va mbare. EA sports merda!");
+    assertReplyIn(reply, "non mi va mbare. EA sports merda!", "naaaah fifa merda");
   }
 
   @Test
@@ -61,7 +64,15 @@ public class MessageResourceTest
   {
     final Reply reply = messageResource.handle(anIncomingMessage("aunni vai"));
 
-    assertValidReply(reply, "eh sapessi mbare");
+    assertReplyIn(reply, "eh sapessi mbare", "minchia se potessi parlare mbare", "sapessi");
+  }
+
+  @Test
+  void why()
+  {
+    final Reply reply = messageResource.handle(anIncomingMessage("why"));
+
+    assertReplyIn(reply, "eh sapessi mbare", "potessi parlare...");
   }
 
   @Test
@@ -74,9 +85,17 @@ public class MessageResourceTest
   private void assertValidReply(Reply reply, String text)
   {
     assertNotNull(reply);
-    assertEquals(text, reply.text);
     assertEquals("aChatId", reply.chat_id);
     assertEquals("sendMessage", reply.method);
+    assertEquals(text, reply.text);
+  }
+
+  private void assertReplyIn(Reply reply, String... options)
+  {
+    assertNotNull(reply);
+    assertEquals("aChatId", reply.chat_id);
+    assertEquals("sendMessage", reply.method);
+    assertTrue(Arrays.asList(options).contains(reply.text));
   }
 
   private Update anIncomingMessage(String text)

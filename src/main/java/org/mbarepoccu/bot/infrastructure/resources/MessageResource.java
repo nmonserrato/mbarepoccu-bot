@@ -3,6 +3,7 @@ package org.mbarepoccu.bot.infrastructure.resources;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -66,7 +67,7 @@ public class MessageResource
   {
     if (StringUtils.containsIgnoreCase(message.text, "aunni si") ||
         StringUtils.containsIgnoreCase(message.text, "aunni su")){
-      return buildReplyWithText(message, "casa tu");
+      return buildReplyWithRandomText(message, "casa tu", "casa as usual. io.");
     }
 
     if (StringUtils.containsIgnoreCase(message.text, "piccione")){
@@ -79,18 +80,28 @@ public class MessageResource
     }
 
     if (StringUtils.containsIgnoreCase(message.text, "aunni vai")){
-      return buildReplyWithText(message, "eh sapessi mbare");
+      return buildReplyWithRandomText(message, "eh sapessi mbare", "minchia se potessi parlare mbare", "sapessi");
     }
 
     if (StringUtils.containsIgnoreCase(message.text, "fifa")){
-      return buildReplyWithText(message, "non mi va mbare. EA sports merda!");
+      return buildReplyWithRandomText(message, "non mi va mbare. EA sports merda!", "naaaah fifa merda");
     }
 
     if (StringUtils.containsIgnoreCase(message.text, "news")){
-      return buildReplyWithText(message, "nada tu");
+      return buildReplyWithRandomText(message, "nada tu");
+    }
+
+    if (StringUtils.containsIgnoreCase(message.text, "why")){
+      return buildReplyWithRandomText(message, "eh sapessi mbare", "potessi parlare...");
     }
 
     return null;
+  }
+
+  private Reply buildReplyWithRandomText(Message message, String... options)
+  {
+    final int index = RandomUtils.nextInt(0, options.length);
+    return buildReplyWithText(message, options[index]);
   }
 
   private Reply buildReplyWithText(Message message, String text)
