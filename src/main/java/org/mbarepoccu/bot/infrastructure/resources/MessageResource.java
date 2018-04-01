@@ -139,6 +139,14 @@ public class MessageResource
       return buildReplyWithRandomText(message, "onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare");
     }
 
+    if (StringUtils.equalsIgnoreCase(message.text, "test gif")){
+      return buildReplyWithGIF(message, "CgADBAADE58AAsgeZAc8eTz0lPWp0gI");
+    }
+
+    if (StringUtils.equalsIgnoreCase(message.text, "test sticker")){
+      return buildReplyWithSticker(message, "CAADBQADuQEAAukKyAMFe9CCAAH2HHcC");
+    }
+
     if (RandomUtils.nextInt(0, 10) < 2)
     {
       return buildReplyWithRandomImage(message);

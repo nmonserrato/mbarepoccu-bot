@@ -98,7 +98,37 @@ public class MessageResourceTest
     assertNull(reply);
   }
 
-  //TODO test sticker
+  @Test
+  void sticker()
+  {
+    final Reply reply = messageResource.handle(anIncomingMessage("test sticker"));
+
+    assertReplyIsSticker(reply);
+  }
+
+  @Test
+  void gif()
+  {
+    final Reply reply = messageResource.handle(anIncomingMessage("test gif"));
+
+    assertReplyIsGIF(reply);
+  }
+
+  private void assertReplyIsSticker(Reply reply)
+  {
+    assertEquals("sendSticker", reply.method);
+    assertNull(reply.text);
+    assertNull(reply.document);
+    assertNotNull(reply.sticker);
+  }
+
+  private void assertReplyIsGIF(Reply reply)
+  {
+    assertEquals("sendDocument", reply.method);
+    assertNull(reply.text);
+    assertNull(reply.sticker);
+    assertNotNull(reply.document);
+  }
 
   private void assertTextReply(Reply reply, String text)
   {
