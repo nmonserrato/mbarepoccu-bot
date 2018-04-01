@@ -36,7 +36,7 @@ public class MessageResourceTest
   @Test
   void piccione()
   {
-    final Update incomingMessage = anIncomingMessage("hai sentito il piccione?");
+    final Message incomingMessage = anIncomingMessage("hai sentito il piccione?");
 
     final Reply reply = messageResource.handle(incomingMessage);
 
@@ -46,7 +46,7 @@ public class MessageResourceTest
   @Test
   void valencia()
   {
-    final Update incomingMessage = anIncomingMessage("valencia");
+    final Message incomingMessage = anIncomingMessage("valencia");
 
     final Reply reply = messageResource.handle(incomingMessage);
 
@@ -100,7 +100,8 @@ public class MessageResourceTest
   @Test
   void message_may_be_null()
   {
-    final Reply reply = messageResource.handle(new Update());
+    final Update update = new Update();
+    final Reply reply = messageResource.handle(update.message);
     assertNull(reply);
   }
 
@@ -122,13 +123,12 @@ public class MessageResourceTest
     assertTrue(Arrays.asList(options).contains(reply.text));
   }
 
-  private Update anIncomingMessage(String text)
+  private Message anIncomingMessage(String text)
   {
-    final Update incomingMessage = new Update();
-    incomingMessage.message = new Message();
-    incomingMessage.message.chat = new Chat();
-    incomingMessage.message.text = text;
-    incomingMessage.message.chat.id = "aChatId";
-    return incomingMessage;
+    Message message = new Message();
+    message.chat = new Chat();
+    message.text = text;
+    message.chat.id = "aChatId";
+    return message;
   }
 }

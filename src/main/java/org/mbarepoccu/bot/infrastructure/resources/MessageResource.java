@@ -43,7 +43,7 @@ public class MessageResource
     try
     {
       final Update update = objectMapper.readValue(string, Update.class);
-      final Reply reply = handle(update);
+      final Reply reply = handle(update.message);
       sleep();
       return reply;
     }
@@ -54,11 +54,11 @@ public class MessageResource
     }
   }
 
-  Reply handle(Update update) {
+  Reply handle(Message message) {
     Reply reply = null;
 
-    if(update.message != null)
-     reply = buildReplyForMessage(update.message);
+    if(message != null)
+     reply = buildReplyForMessage(message);
 
     if(reply != null)
       LOGGER.info("Replying with {}", ToStringBuilder.reflectionToString(reply));
@@ -68,7 +68,7 @@ public class MessageResource
 
   private void sleep()
   {
-    final long delay = RandomUtils.nextLong(1000, 5000);
+    final long delay = RandomUtils.nextLong(500, 2000);
     try
     {
       Thread.sleep(delay);
@@ -186,7 +186,7 @@ class Update {
   }
 }
 
-class Reply{
+class Reply {
   public String method = "sendMessage";
   public String chat_id;
   public String text;
