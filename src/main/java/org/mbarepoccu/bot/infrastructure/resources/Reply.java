@@ -1,11 +1,18 @@
 package org.mbarepoccu.bot.infrastructure.resources;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.mbarepoccu.bot.domain.Chat;
 
 class Reply {
-  @SuppressWarnings("unused")
   private String method;
   public String chat_id;
+  public String text;
+  public String sticker;
+
+  public Reply()
+  {
+  }
 
   public Reply(String chatId, String method)
   {
@@ -13,8 +20,20 @@ class Reply {
     this.method = method;
   }
 
+  @Override
+  public String toString()
+  {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+  }
+
+  public void setMethod(String method)
+  {
+    this.method = method;
+  }
+
   static class Builder {
     private Chat chat;
+    private String method;
     private String text;
     private String sticker;
     private String gif;
@@ -24,6 +43,7 @@ class Reply {
     }
 
     public Builder withText(String text) {
+      this.method = "sendMessage";
       this.text = text;
       this.sticker = null;
       this.gif = null;
@@ -31,6 +51,7 @@ class Reply {
     }
 
     public Builder withSticker(String file_id) {
+      this.method = "sendSticker";
       this.sticker = file_id;
       this.text = null;
       this.gif = null;
@@ -38,6 +59,7 @@ class Reply {
     }
 
     public Builder withGIF(String file_id) {
+      this.method = "sendDocument";
       this.gif = file_id;
       this.text = null;
       this.sticker = null;
@@ -54,10 +76,14 @@ class Reply {
       if (gif != null)
       {
         reply = new ReplyWithGIF(chat.id, gif);
-      } else if (sticker != null){
-        reply = new ReplyWithSticker(chat.id, sticker);
-      } else {
-        reply = new ReplyWithText(chat.id, text);
+      }
+      else
+      {
+        reply = new Reply();
+        reply.chat_id = chat.id;
+        reply.text = text;
+        reply.sticker = sticker;
+        reply.setMethod(method);
       }
 
       return reply;
