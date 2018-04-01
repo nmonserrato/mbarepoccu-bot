@@ -1,11 +1,14 @@
 package org.mbarepoccu.bot.infrastructure.resources;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.mbarepoccu.bot.domain.Chat;
 import org.mbarepoccu.bot.domain.Message;
-import org.mbarepoccu.bot.infrastructure.ObjectMapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,19 +29,26 @@ import static org.mbarepoccu.bot.infrastructure.resources.Reply.Builder.aReply;
 public class MessageResource
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(MessageResource.class);
-  private final ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper = new ObjectMapper(){{
+    enable(SerializationFeature.INDENT_OUTPUT);
+    enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+    disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);
+    disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
+    disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
+    disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
+  }};
 
   private boolean withDelay = true;
 
   @Autowired
   public MessageResource()
   {
-    this(true);
   }
 
-  MessageResource(boolean withDelay)
+  public MessageResource(boolean withDelay)
   {
-    this.objectMapper = ObjectMapperFactory.forRestResource();
     this.withDelay = withDelay;
   }
 

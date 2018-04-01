@@ -1,20 +1,17 @@
 package org.mbarepoccu.bot.infrastructure.resources;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mbarepoccu.bot.infrastructure.ObjectMapperFactory;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MessageResourceTest
 {
   private final MessageResource messageResource = new MessageResource(false);
-  private final ObjectMapper objectMapper = ObjectMapperFactory.forRestResource();
 
   @Test
   void we()
@@ -120,66 +117,35 @@ public class MessageResourceTest
 
   private void assertReplyIsSticker(Reply reply)
   {
-    try
-    {
-      final String json = objectMapper.writeValueAsString(reply);
-      assertTrue(json.contains("\"method\" : \"sendSticker\""));
-      assertTrue(json.contains("\"chat_id\" : \"aChatId\""));
-      assertTrue(json.contains("\"sticker\" : \""));
-      assertFalse(json.contains("\"text\" : \""));
-      assertFalse(json.contains("\"document\" : \""));
-    }
-    catch (JsonProcessingException e)
-    {
-      throw new RuntimeException(e);
-    }
+    assertEquals("sendSticker", reply.getMethod());
+    assertNull(reply.text);
+    assertNull(reply.document);
+    assertNotNull(reply.sticker);
   }
 
   private void assertReplyIsGIF(Reply reply)
   {
-    try
-    {
-      final String json = objectMapper.writeValueAsString(reply);
-      assertTrue(json.contains("\"method\" : \"sendDocument\""));
-      assertTrue(json.contains("\"chat_id\" : \"aChatId\""));
-      assertTrue(json.contains("\"document\" : \""));
-      assertFalse(json.contains("\"text\" : \""));
-      assertFalse(json.contains("\"sticker\" : \""));
-    }
-    catch (JsonProcessingException e)
-    {
-      throw new RuntimeException(e);
-    }
+    assertTrue(reply instanceof ReplyWithGIF);
+    assertEquals("sendDocument", reply.getMethod());
+    assertNull(reply.text);
+    assertNull(reply.sticker);
+    assertNotNull(reply.document);
   }
 
   private void assertTextReply(Reply reply, String text)
   {
-    try
-    {
-      final String json = objectMapper.writeValueAsString(reply);
-      assertTrue(json.contains("\"method\" : \"sendMessage\""));
-      assertTrue(json.contains("\"chat_id\" : \"aChatId\""));
-      assertTrue(json.contains("\"text\" : \""+text+"\""));
-      assertFalse(json.contains("\"document\" : \""));
-      assertFalse(json.contains("\"sticker\" : \""));
-    }
-    catch (JsonProcessingException e)
-    {
-      throw new RuntimeException(e);
-    }
+    assertNotNull(reply);
+    assertEquals("aChatId", reply.chat_id);
+    assertEquals("sendMessage", reply.getMethod());
+    assertEquals(text, reply.text);
   }
 
   private void assertTextReply(Reply reply, String... options)
   {
-    boolean valid = false;
-    for (String option : options)
-    {
-      try {
-        assertTextReply(reply, option);
-        valid = true;
-      } catch (AssertionError e){ }
-    }
-    assertTrue(valid, "expected value to match one of " + Arrays.toString(options));
+    assertNotNull(reply);
+    assertEquals("aChatId", reply.chat_id);
+    assertEquals("sendMessage", reply.getMethod());
+    assertTrue(Arrays.asList(options).contains(reply.text));
   }
 
   private String anIncomingMessage(String text)
