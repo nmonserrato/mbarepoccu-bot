@@ -7,6 +7,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.mbarepoccu.bot.domain.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,7 +58,7 @@ public class MessageResource
     Reply reply = null;
 
     if(update.message != null)
-     reply = buildReplyForMessage(update.message);;
+     reply = buildReplyForMessage(update.message);
 
     if(reply != null)
       LOGGER.info("Replying with {}", ToStringBuilder.reflectionToString(reply));
@@ -175,29 +176,8 @@ public class MessageResource
   }
 }
 
-class Chat {
-  public String id;
-
-  @Override
-  public String toString()
-  {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-  }
-}
-
-class Message {
-  public String text;
-  public Chat chat;
-
-  @Override
-  public String toString()
-  {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-  }
-}
-
 class Update {
-    public Message message;
+  public Message message;
 
   @Override
   public String toString()

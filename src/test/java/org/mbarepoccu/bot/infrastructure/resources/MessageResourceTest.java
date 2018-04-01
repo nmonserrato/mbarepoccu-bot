@@ -1,6 +1,8 @@
 package org.mbarepoccu.bot.infrastructure.resources;
 
 import org.junit.jupiter.api.Test;
+import org.mbarepoccu.bot.domain.Chat;
+import org.mbarepoccu.bot.domain.Message;
 
 import java.util.Arrays;
 
