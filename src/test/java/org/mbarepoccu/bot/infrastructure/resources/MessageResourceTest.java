@@ -1,8 +1,6 @@
 package org.mbarepoccu.bot.infrastructure.resources;
 
 import org.junit.jupiter.api.Test;
-import org.mbarepoccu.bot.domain.Chat;
-import org.mbarepoccu.bot.domain.Message;
 
 import java.util.Arrays;
 
@@ -13,14 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MessageResourceTest
 {
-  private final MessageResource messageResource = new MessageResource();
+  private final MessageResource messageResource = new MessageResource(false);
 
   @Test
   void we()
   {
     final Reply reply = messageResource.handle(anIncomingMessage("we"));
 
-    assertReplyIn(reply, "we dica", "we", "we mbare");
+    assertTextReply(reply, "we dica", "we", "we mbare");
   }
 
   @Test
@@ -29,28 +27,24 @@ public class MessageResourceTest
     final Reply reply1 = messageResource.handle(anIncomingMessage("we aunni si"));
     final Reply reply2 = messageResource.handle(anIncomingMessage("aunni su"));
 
-    assertReplyIn(reply1, "casa tu", "casa as usual...io");
-    assertReplyIn(reply2, "casa tu", "casa as usual...io");
+    assertTextReply(reply1, "casa tu", "casa as usual...io");
+    assertTextReply(reply2, "casa tu", "casa as usual...io");
   }
 
   @Test
   void piccione()
   {
-    final Message incomingMessage = anIncomingMessage("hai sentito il piccione?");
+    final Reply reply = messageResource.handle(anIncomingMessage("hai sentito il piccione?"));
 
-    final Reply reply = messageResource.handle(incomingMessage);
-
-    assertValidReply(reply, "non parlo di piccione con te mbare");
+    assertTextReply(reply, "non parlo di piccione con te mbare");
   }
 
   @Test
   void valencia()
   {
-    final Message incomingMessage = anIncomingMessage("valencia");
+    final Reply reply = messageResource.handle(anIncomingMessage("valencia"));
 
-    final Reply reply = messageResource.handle(incomingMessage);
-
-    assertReplyIn(reply, "onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare");
+    assertTextReply(reply, "onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare");
   }
 
   @Test
@@ -60,9 +54,9 @@ public class MessageResourceTest
     final Reply reply2 = messageResource.handle(anIncomingMessage("con"));
     final Reply reply3 = messageResource.handle(anIncomingMessage("con?"));
 
-    assertValidReply(reply1, "tua sorella");
-    assertValidReply(reply2, "tua sorella");
-    assertValidReply(reply3, "tua sorella");
+    assertTextReply(reply1, "tua sorella");
+    assertTextReply(reply2, "tua sorella");
+    assertTextReply(reply3, "tua sorella");
   }
 
   @Test
@@ -70,7 +64,7 @@ public class MessageResourceTest
   {
     final Reply reply = messageResource.handle(anIncomingMessage("we news"));
 
-    assertValidReply(reply, "nada tu");
+    assertTextReply(reply, "nada tu");
   }
 
   @Test
@@ -78,7 +72,7 @@ public class MessageResourceTest
   {
     final Reply reply = messageResource.handle(anIncomingMessage("fifa"));
 
-    assertReplyIn(reply, "non mi va mbare. EA sports merda!", "naaaah fifa merda");
+    assertTextReply(reply, "non mi va mbare. EA sports merda!", "naaaah fifa merda");
   }
 
   @Test
@@ -86,7 +80,7 @@ public class MessageResourceTest
   {
     final Reply reply = messageResource.handle(anIncomingMessage("aunni vai"));
 
-    assertReplyIn(reply, "eh sapessi mbare", "minchia se potessi parlare mbare", "sapessi");
+    assertTextReply(reply, "eh sapessi mbare", "minchia se potessi parlare mbare", "sapessi");
   }
 
   @Test
@@ -94,20 +88,19 @@ public class MessageResourceTest
   {
     final Reply reply = messageResource.handle(anIncomingMessage("why"));
 
-    assertReplyIn(reply, "eh sapessi mbare", "potessi parlare...");
+    assertTextReply(reply, "eh sapessi mbare", "potessi parlare...");
   }
 
   @Test
   void message_may_be_null()
   {
-    final Update update = new Update();
-    final Reply reply = messageResource.handle(update.message);
+    final Reply reply = messageResource.handle("{}");
     assertNull(reply);
   }
 
   //TODO test sticker
 
-  private void assertValidReply(Reply reply, String text)
+  private void assertTextReply(Reply reply, String text)
   {
     assertNotNull(reply);
     assertEquals("aChatId", reply.chat_id);
@@ -115,7 +108,7 @@ public class MessageResourceTest
     assertEquals(text, reply.text);
   }
 
-  private void assertReplyIn(Reply reply, String... options)
+  private void assertTextReply(Reply reply, String... options)
   {
     assertNotNull(reply);
     assertEquals("aChatId", reply.chat_id);
@@ -123,12 +116,26 @@ public class MessageResourceTest
     assertTrue(Arrays.asList(options).contains(reply.text));
   }
 
-  private Message anIncomingMessage(String text)
+  private String anIncomingMessage(String text)
   {
-    Message message = new Message();
-    message.chat = new Chat();
-    message.text = text;
-    message.chat.id = "aChatId";
-    return message;
+    return "{" +
+      "  \"update_id\": 512650892," +
+      "  \"message\": {" +
+      "    \"message_id\": 58," +
+      "    \"from\": {" +
+      "      \"id\": 8588218," +
+      "      \"is_bot\": false," +
+      "      \"first_name\": \"Nino\"," +
+      "      \"language_code\": \"en-US\"" +
+      "    }," +
+      "    \"chat\":{" +
+      "      \"id\": \"aChatId\"," +
+      "      \"first_name\": \"Nino\"," +
+      "      \"type\": \"private\"" +
+      "    }," +
+      "    \"date\": 1522510390," +
+      "    \"text\": \"" + text + "\"" +
+      "  }  " +
+      "}";
   }
 }

@@ -11,6 +11,7 @@ import org.mbarepoccu.bot.domain.Chat;
 import org.mbarepoccu.bot.domain.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +36,18 @@ public class MessageResource
     disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
   }};
 
+  private boolean withDelay = true;
+
+  @Autowired
+  public MessageResource()
+  {
+  }
+
+  public MessageResource(boolean withDelay)
+  {
+    this.withDelay = withDelay;
+  }
+
   @RequestMapping(value = "/status", method = RequestMethod.GET)
   public String status() {
     return "mbarepoccu-bot: 1.0.0-SNAPSHOT";
@@ -52,12 +65,12 @@ public class MessageResource
     }
     catch (IOException e)
     {
-      LOGGER.error("Error parsing input update");
+      LOGGER.error("Error parsing input update", e);
       return null;
     }
   }
 
-  Reply handle(Message message) {
+  private Reply handle(Message message) {
     Reply reply = null;
 
     if(message != null)
@@ -71,12 +84,17 @@ public class MessageResource
 
   private void sleep()
   {
-    final long delay = RandomUtils.nextLong(500, 2000);
-    try
+    if(withDelay)
     {
-      Thread.sleep(delay);
+      final long delay = RandomUtils.nextLong(500, 2000);
+      try
+      {
+        Thread.sleep(delay);
+      }
+      catch (InterruptedException e)
+      {
+      }
     }
-    catch (InterruptedException e) { }
   }
 
   private Reply buildReplyForMessage(Message message)
@@ -92,13 +110,13 @@ public class MessageResource
     }
 
     if (StringUtils.containsIgnoreCase(message.text, "piccione")){
-      return buildReplyWithText(message, "non parlo di piccione con te mbare");
+      return aReply().in(message.chat).withText("non parlo di piccione con te mbare").build();
     }
 
     if (StringUtils.containsIgnoreCase(message.text, "con chi") ||
         StringUtils.equalsIgnoreCase(message.text, "con") ||
       StringUtils.equalsIgnoreCase(message.text, "con?")){
-      return buildReplyWithText(message, "tua sorella");
+      return aReply().in(message.chat).withText("tua sorella").build();
     }
 
     if (StringUtils.containsIgnoreCase(message.text, "aunni vai")){
@@ -148,12 +166,7 @@ public class MessageResource
   private Reply buildReplyWithRandomText(Message message, String... options)
   {
     final int index = RandomUtils.nextInt(0, options.length);
-    return buildReplyWithText(message, options[index]);
-  }
-
-  private Reply buildReplyWithText(Message message, String text)
-  {
-    return aReply().in(message.chat).withText(text).build();
+    return aReply().in(message.chat).withText(options[index]).build();
   }
 
   private Reply buildReplyWithSticker(Message message, String file_id)
@@ -199,15 +212,37 @@ class Reply {
   }
 
   static class Builder {
-    private String text;
     private Chat chat;
+    private String method;
+    private String text;
+    private String sticker;
+    private String gif;
 
     public static Builder aReply() {
       return new Builder();
     }
 
     public Builder withText(String text) {
+      this.method = "sendMessage";
       this.text = text;
+      this.sticker = null;
+      this.gif = null;
+      return this;
+    }
+
+    public Builder withSticker(String file_id) {
+      this.method = "sendSticker";
+      this.sticker = file_id;
+      this.text = null;
+      this.gif = null;
+      return this;
+    }
+
+    public Builder withGIF(String file_id) {
+      this.method = "sendDocument";
+      this.gif = file_id;
+      this.text = null;
+      this.sticker = null;
       return this;
     }
 
@@ -220,7 +255,9 @@ class Reply {
       final Reply reply = new Reply();
       reply.chat_id = chat.id;
       reply.text = text;
-      reply.method = "sendMessage";
+      reply.sticker = sticker;
+      reply.document = gif;
+      reply.method = method;
       return reply;
     }
   }
