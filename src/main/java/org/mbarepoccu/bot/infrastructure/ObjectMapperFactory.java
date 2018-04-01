@@ -1,6 +1,8 @@
 package org.mbarepoccu.bot.infrastructure;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -19,6 +21,8 @@ public class ObjectMapperFactory
       disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
       disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
       setSerializationInclusion(JsonInclude.Include.NON_NULL);
+      setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+      setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
     }};
   }
 }
