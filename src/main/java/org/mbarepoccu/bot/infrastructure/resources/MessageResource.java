@@ -18,11 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
 import static org.mbarepoccu.bot.infrastructure.resources.Reply.Builder.aReply;
 
 @RestController
@@ -144,11 +140,11 @@ public class MessageResource
     }
 
     if (StringUtils.equalsIgnoreCase(message.text, "test gif")){
-      return aReply().in(message.chat).withGIF("CgADBAADE58AAsgeZAc8eTz0lPWp0gI").build();
+      return buildReplyWithGIF(message, "CgADBAADE58AAsgeZAc8eTz0lPWp0gI");
     }
 
     if (StringUtils.equalsIgnoreCase(message.text, "test sticker")){
-      return aReply().in(message.chat).withSticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC").build();
+      return buildReplyWithSticker(message, "CAADBQADuQEAAukKyAMFe9CCAAH2HHcC");
     }
 
     if (RandomUtils.nextInt(0, 10) < 2)
@@ -161,23 +157,116 @@ public class MessageResource
 
   private Reply buildReplyWithRandomImage(Message message)
   {
-    final List<Reply> randomResponses = Arrays.asList(
-      aReply().in(message.chat).withSticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC").build(),
-      aReply().in(message.chat).withSticker("CAADBAADgAIAAo-zWQNa5qKVuK6KiQI").build(),
-      aReply().in(message.chat).withGIF("CgADBAADE58AAsgeZAc8eTz0lPWp0gI").build()
-    );
-    return random(randomResponses);
+    final int index = RandomUtils.nextInt(0, 3);
+    switch (index)
+    {
+      case 0: //XD sticker
+        return buildReplyWithSticker(message, "CAADBQADuQEAAukKyAMFe9CCAAH2HHcC");
+      case 1: //cheers sticker
+        return buildReplyWithSticker(message, "CAADBAADgAIAAo-zWQNa5qKVuK6KiQI");
+      case 2: //cheers GIF
+        return buildReplyWithGIF(message, "CgADBAADE58AAsgeZAc8eTz0lPWp0gI");
+    }
+
+    return null;
   }
 
   private Reply buildReplyWithRandomText(Message message, String... options)
   {
-    final List<Reply> randomReplies = Stream.of(options).map(t -> aReply().in(message.chat).withText(t).build()).collect(toList());
-    return random(randomReplies);
+    final int index = RandomUtils.nextInt(0, options.length);
+    return aReply().in(message.chat).withText(options[index]).build();
   }
 
-  private Reply random(List<Reply> randomResponses)
+  private Reply buildReplyWithSticker(Message message, String file_id)
   {
-    return randomResponses.get(RandomUtils.nextInt(0, randomResponses.size()));
+    Reply reply = new Reply();
+    reply.chat_id = message.chat.id;
+    reply.sticker = file_id;
+    reply.method = "sendSticker";
+    return reply;
+  }
+
+  private Reply buildReplyWithGIF(Message message, String file_id)
+  {
+    Reply reply = new Reply();
+    reply.chat_id = message.chat.id;
+    reply.document = file_id;
+    reply.method = "sendDocument";
+    return reply;
   }
 }
 
+class Update {
+  public Message message;
+
+  @Override
+  public String toString()
+  {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+  }
+}
+
+class Reply {
+  public String method = "sendMessage";
+  public String chat_id;
+  public String text;
+  public String sticker;
+  public String document;
+
+  @Override
+  public String toString()
+  {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+  }
+
+  static class Builder {
+    private Chat chat;
+    private String method;
+    private String text;
+    private String sticker;
+    private String gif;
+
+    public static Builder aReply() {
+      return new Builder();
+    }
+
+    public Builder withText(String text) {
+      this.method = "sendMessage";
+      this.text = text;
+      this.sticker = null;
+      this.gif = null;
+      return this;
+    }
+
+    public Builder withSticker(String file_id) {
+      this.method = "sendSticker";
+      this.sticker = file_id;
+      this.text = null;
+      this.gif = null;
+      return this;
+    }
+
+    public Builder withGIF(String file_id) {
+      this.method = "sendDocument";
+      this.gif = file_id;
+      this.text = null;
+      this.sticker = null;
+      return this;
+    }
+
+    public Builder in(Chat chat) {
+      this.chat = chat;
+      return this;
+    }
+
+    public Reply build() {
+      final Reply reply = new Reply();
+      reply.chat_id = chat.id;
+      reply.text = text;
+      reply.sticker = sticker;
+      reply.document = gif;
+      reply.method = method;
+      return reply;
+    }
+  }
+}
