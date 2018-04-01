@@ -5,25 +5,21 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.mbarepoccu.bot.domain.Chat;
 
 class Reply {
-  private String method;
+  private String method = "sendMessage";
   public String chat_id;
   public String text;
   public String sticker;
-
-  public Reply()
-  {
-  }
-
-  public Reply(String chatId, String method)
-  {
-    this.chat_id = chatId;
-    this.method = method;
-  }
+  public String document;
 
   @Override
   public String toString()
   {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+  }
+
+  public String getMethod()
+  {
+    return method;
   }
 
   public void setMethod(String method)
@@ -75,17 +71,18 @@ class Reply {
       final Reply reply;
       if (gif != null)
       {
-        reply = new ReplyWithGIF(chat.id, gif);
+        reply = new ReplyWithGIF();
       }
       else
       {
         reply = new Reply();
-        reply.chat_id = chat.id;
-        reply.text = text;
-        reply.sticker = sticker;
-        reply.setMethod(method);
       }
 
+      reply.chat_id = chat.id;
+      reply.text = text;
+      reply.sticker = sticker;
+      reply.document = gif;
+      reply.setMethod(method);
       return reply;
     }
   }
