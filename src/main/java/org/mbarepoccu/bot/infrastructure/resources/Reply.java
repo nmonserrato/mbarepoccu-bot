@@ -2,6 +2,8 @@ package org.mbarepoccu.bot.infrastructure.resources;
 
 import org.mbarepoccu.bot.domain.Chat;
 
+import java.lang.reflect.Constructor;
+
 class Reply {
   @SuppressWarnings("unused")
   private String method;
@@ -15,32 +17,28 @@ class Reply {
 
   static class Builder {
     private Chat chat;
-    private String text;
-    private String sticker;
-    private String gif;
+    private Class<? extends Reply> clazz;
+    private String content;
 
     public static Builder aReply() {
       return new Builder();
     }
 
     public Builder withText(String text) {
-      this.text = text;
-      this.sticker = null;
-      this.gif = null;
+      this.clazz = ReplyWithText.class;
+      this.content = text;
       return this;
     }
 
-    public Builder withSticker(String file_id) {
-      this.sticker = file_id;
-      this.text = null;
-      this.gif = null;
+    public Builder withSticker(String fileId) {
+      this.clazz = ReplyWithSticker.class;
+      this.content = fileId;
       return this;
     }
 
-    public Builder withGIF(String file_id) {
-      this.gif = file_id;
-      this.text = null;
-      this.sticker = null;
+    public Builder withGIF(String fileId) {
+      this.clazz = ReplyWithGIF.class;
+      this.content = fileId;
       return this;
     }
 
@@ -50,17 +48,13 @@ class Reply {
     }
 
     public Reply build() {
-      final Reply reply;
-      if (gif != null)
-      {
-        reply = new ReplyWithGIF(chat.id, gif);
-      } else if (sticker != null){
-        reply = new ReplyWithSticker(chat.id, sticker);
-      } else {
-        reply = new ReplyWithText(chat.id, text);
+      try {
+        final Constructor<? extends Reply> constructor = clazz.getConstructor(String.class, String.class);
+        return constructor.newInstance(chat.id, content);
       }
-
-      return reply;
+      catch (ReflectiveOperationException e) {
+        throw new RuntimeException(e);
+      }
     }
   }
 }
