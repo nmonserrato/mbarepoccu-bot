@@ -7,6 +7,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.mbarepoccu.bot.domain.Chat;
 import org.mbarepoccu.bot.domain.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+
+import static org.mbarepoccu.bot.infrastructure.resources.Reply.Builder.aReply;
 
 @RestController
 public class MessageResource
@@ -150,11 +153,7 @@ public class MessageResource
 
   private Reply buildReplyWithText(Message message, String text)
   {
-    Reply reply = new Reply();
-    reply.chat_id = message.chat.id;
-    reply.text = text;
-    reply.method = "sendMessage";
-    return reply;
+    return aReply().in(message.chat).withText(text).build();
   }
 
   private Reply buildReplyWithSticker(Message message, String file_id)
@@ -197,5 +196,32 @@ class Reply {
   public String toString()
   {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+  }
+
+  static class Builder {
+    private String text;
+    private Chat chat;
+
+    public static Builder aReply() {
+      return new Builder();
+    }
+
+    public Builder withText(String text) {
+      this.text = text;
+      return this;
+    }
+
+    public Builder in(Chat chat) {
+      this.chat = chat;
+      return this;
+    }
+
+    public Reply build() {
+      final Reply reply = new Reply();
+      reply.chat_id = chat.id;
+      reply.text = text;
+      reply.method = "sendMessage";
+      return reply;
+    }
   }
 }
