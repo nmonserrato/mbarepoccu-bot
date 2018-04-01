@@ -78,15 +78,12 @@ public class MessageResource
 
   private void sleep()
   {
-    if(withDelay)
-    {
+    if (withDelay) {
       final long delay = RandomUtils.nextLong(500, 2000);
-      try
-      {
+      try {
         Thread.sleep(delay);
       }
-      catch (InterruptedException e)
-      {
+      catch (InterruptedException e) {
       }
     }
   }
@@ -151,18 +148,17 @@ public class MessageResource
 
   private Reply buildReplyWithRandomImage(Message message)
   {
-    final List<Reply> randomResponses = Arrays.asList(
+    final List<Reply> options = Arrays.asList(
       aReply().in(message.chat).withSticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC").build(),
       aReply().in(message.chat).withSticker("CAADBAADgAIAAo-zWQNa5qKVuK6KiQI").build(),
       aReply().in(message.chat).withGIF("CgADBAADE58AAsgeZAc8eTz0lPWp0gI").build()
     );
-    return random(randomResponses);
+    return random(options);
   }
 
-  private Reply buildReplyWithRandomText(Message message, String... options)
+  private Reply buildReplyWithRandomText(Message message, String... textuals)
   {
-    final List<Reply> randomReplies = Stream.of(options).map(t -> aReply().in(message.chat).withText(t).build()).collect(toList());
-    return random(randomReplies);
+    return random(Stream.of(textuals).map(t -> aReply().in(message.chat).withText(t).build()).collect(toList()));
   }
 
   private Reply random(List<Reply> randomResponses)
