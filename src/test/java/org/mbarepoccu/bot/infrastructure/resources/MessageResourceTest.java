@@ -95,6 +95,7 @@ public class MessageResourceTest
   void message_may_be_null()
   {
     final Reply reply = messageResource.handle("{}");
+
     assertNull(reply);
   }
 
@@ -116,7 +117,7 @@ public class MessageResourceTest
 
   private void assertReplyIsSticker(Reply reply)
   {
-    assertEquals("sendSticker", reply.method);
+    assertEquals("sendSticker", reply.getMethod());
     assertNull(reply.text);
     assertNull(reply.document);
     assertNotNull(reply.sticker);
@@ -124,7 +125,8 @@ public class MessageResourceTest
 
   private void assertReplyIsGIF(Reply reply)
   {
-    assertEquals("sendDocument", reply.method);
+    assertTrue(reply instanceof ReplyWithGIF);
+    assertEquals("sendDocument", reply.getMethod());
     assertNull(reply.text);
     assertNull(reply.sticker);
     assertNotNull(reply.document);
@@ -134,7 +136,7 @@ public class MessageResourceTest
   {
     assertNotNull(reply);
     assertEquals("aChatId", reply.chat_id);
-    assertEquals("sendMessage", reply.method);
+    assertEquals("sendMessage", reply.getMethod());
     assertEquals(text, reply.text);
   }
 
@@ -142,7 +144,7 @@ public class MessageResourceTest
   {
     assertNotNull(reply);
     assertEquals("aChatId", reply.chat_id);
-    assertEquals("sendMessage", reply.method);
+    assertEquals("sendMessage", reply.getMethod());
     assertTrue(Arrays.asList(options).contains(reply.text));
   }
 
