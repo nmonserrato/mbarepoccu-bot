@@ -1,4 +1,6 @@
-package org.mbarepoccu.bot.domain.reply.content;
+package org.mbarepoccu.bot.domain.reply.content.provider;
+
+import org.mbarepoccu.bot.domain.reply.content.Content;
 
 public class FixedContentProvider implements ContentProvider
 {

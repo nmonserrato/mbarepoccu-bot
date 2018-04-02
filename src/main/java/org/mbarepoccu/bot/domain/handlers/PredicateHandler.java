@@ -3,8 +3,8 @@ package org.mbarepoccu.bot.domain.handlers;
 import org.mbarepoccu.bot.domain.Handler;
 import org.mbarepoccu.bot.domain.Message;
 import org.mbarepoccu.bot.domain.reply.content.Content;
-import org.mbarepoccu.bot.domain.reply.content.ContentProvider;
-import org.mbarepoccu.bot.domain.reply.content.FixedContentProvider;
+import org.mbarepoccu.bot.domain.reply.content.provider.ContentProvider;
+import org.mbarepoccu.bot.domain.reply.content.provider.FixedContentProvider;
 import org.mbarepoccu.bot.infrastructure.resources.Reply;
 
 import java.util.function.Predicate;

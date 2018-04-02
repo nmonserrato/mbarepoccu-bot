@@ -1,6 +1,8 @@
-package org.mbarepoccu.bot.domain.reply.content;
+package org.mbarepoccu.bot.domain.reply.content.provider;
 
 import org.apache.commons.lang3.RandomUtils;
+import org.mbarepoccu.bot.domain.reply.content.Content;
+import org.mbarepoccu.bot.domain.reply.content.Text;
 
 import java.util.Arrays;
 import java.util.List;

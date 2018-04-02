@@ -3,14 +3,14 @@ package org.mbarepoccu.bot.domain.handlers;
 import org.apache.commons.lang3.RandomUtils;
 import org.mbarepoccu.bot.domain.Handler;
 import org.mbarepoccu.bot.domain.reply.content.GIF;
-import org.mbarepoccu.bot.domain.reply.content.RandomContentProvider;
+import org.mbarepoccu.bot.domain.reply.content.provider.RandomContentProvider;
 import org.mbarepoccu.bot.domain.reply.content.Sticker;
 import org.mbarepoccu.bot.domain.reply.content.Text;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mbarepoccu.bot.domain.reply.content.RandomContentProvider.randomText;
+import static org.mbarepoccu.bot.domain.reply.content.provider.RandomContentProvider.randomText;
 
 public class HandlerFactory
 {
