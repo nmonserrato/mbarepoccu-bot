@@ -4,6 +4,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.mbarepoccu.bot.domain.Chat;
+import org.mbarepoccu.bot.domain.reply.content.Content;
 
 public class Reply {
   public String method = "sendMessage";
@@ -20,7 +21,6 @@ public class Reply {
 
   public static class Builder {
     private Chat chat;
-    private String method;
     private String text;
     private String sticker;
     private String gif;
@@ -30,7 +30,6 @@ public class Reply {
     }
 
     public Builder withText(String text) {
-      this.method = "sendMessage";
       this.text = text;
       this.sticker = null;
       this.gif = null;
@@ -38,7 +37,6 @@ public class Reply {
     }
 
     public Builder withRandomText(String... options) {
-      this.method = "sendMessage";
       this.text = options[RandomUtils.nextInt(0, options.length)];
       this.sticker = null;
       this.gif = null;
@@ -46,7 +44,6 @@ public class Reply {
     }
 
     public Builder withSticker(String file_id) {
-      this.method = "sendSticker";
       this.sticker = file_id;
       this.text = null;
       this.gif = null;
@@ -54,10 +51,16 @@ public class Reply {
     }
 
     public Builder withGIF(String file_id) {
-      this.method = "sendDocument";
       this.gif = file_id;
       this.text = null;
       this.sticker = null;
+      return this;
+    }
+
+    public Builder withContent(Content content) {
+      this.gif = content.getGIF();
+      this.text = content.getText();
+      this.sticker = content.getSticker();
       return this;
     }
 
@@ -72,8 +75,20 @@ public class Reply {
       reply.text = text;
       reply.sticker = sticker;
       reply.document = gif;
-      reply.method = method;
+      reply.method = decodeMethod();
       return reply;
+    }
+
+    private String decodeMethod()
+    {
+      if (text != null)
+        return "sendMessage";
+      if (gif != null)
+        return "sendDocument";
+      if (sticker != null)
+        return "sendSticker";
+
+      return null;
     }
   }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -32,6 +33,7 @@ public class MessageResource
     .getSubTypesOf(Handler.class)
     .stream()
     .filter(c -> !c.getSimpleName().equals("RandomHandler"))
+    .filter(c -> !Modifier.isAbstract(c.getModifiers()))
     .map(createInstance())
     .collect(toList());
 
