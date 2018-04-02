@@ -1,32 +1,20 @@
 package org.mbarepoccu.bot.domain.handlers;
 
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.mbarepoccu.bot.domain.Handler;
-import org.mbarepoccu.bot.domain.Message;
-import org.mbarepoccu.bot.infrastructure.resources.Reply;
+import org.mbarepoccu.bot.domain.reply.content.GIF;
+import org.mbarepoccu.bot.domain.reply.content.RandomContentProvider;
+import org.mbarepoccu.bot.domain.reply.content.Sticker;
 
-import java.util.Arrays;
-import java.util.List;
+import static java.util.Arrays.asList;
 
-import static org.mbarepoccu.bot.infrastructure.resources.Reply.Builder.aReply;
-
-public class RandomHandler implements Handler
+public class RandomHandler extends PredicateHandler
 {
-  @Override
-  public boolean canHandle(Message message)
+  public RandomHandler()
   {
-    return RandomUtils.nextInt(0, 10) < 3;
-  }
-
-  @Override
-  public Reply buildAnswer(Message message)
-  {
-    final List<Reply> options = Arrays.asList(
-      aReply().in(message.chat).withSticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC").build(),
-      aReply().in(message.chat).withSticker("CAADBAADgAIAAo-zWQNa5qKVuK6KiQI").build(),
-      aReply().in(message.chat).withGIF("CgADBAADE58AAsgeZAc8eTz0lPWp0gI").build()
-    );
-    return options.get(RandomUtils.nextInt(0, options.size()));
+    super(m -> RandomUtils.nextInt(0, 10) < 3, new RandomContentProvider(asList(
+      new Sticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC"),
+      new Sticker("CAADBAADgAIAAo-zWQNa5qKVuK6KiQI"),
+      new GIF("CgADBAADE58AAsgeZAc8eTz0lPWp0gI")
+    )));
   }
 }

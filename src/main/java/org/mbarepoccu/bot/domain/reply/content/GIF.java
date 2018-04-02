@@ -1,18 +1,18 @@
 package org.mbarepoccu.bot.domain.reply.content;
 
-public class TextContent implements Content
+public class GIF implements Content
 {
-  private final String text;
+  private final String fileId;
 
-  public TextContent(String text)
+  public GIF(String fileId)
   {
-    this.text = text;
+    this.fileId = fileId;
   }
 
   @Override
   public String getText()
   {
-    return text;
+    return null;
   }
 
   @Override
@@ -24,6 +24,6 @@ public class TextContent implements Content
   @Override
   public String getGIF()
   {
-    return null;
+    return fileId;
   }
 }

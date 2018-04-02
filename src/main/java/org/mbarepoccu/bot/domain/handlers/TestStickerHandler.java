@@ -1,22 +1,11 @@
 package org.mbarepoccu.bot.domain.handlers;
 
-import org.mbarepoccu.bot.domain.Handler;
-import org.mbarepoccu.bot.domain.Message;
-import org.mbarepoccu.bot.infrastructure.resources.Reply;
+import org.mbarepoccu.bot.domain.reply.content.Sticker;
 
-import static org.mbarepoccu.bot.infrastructure.resources.Reply.Builder.aReply;
-
-public class TestStickerHandler implements Handler
+public class TestStickerHandler extends PredicateHandler
 {
-  @Override
-  public boolean canHandle(Message message)
+  public TestStickerHandler()
   {
-    return message.textIsOneOf("test sticker");
-  }
-
-  @Override
-  public Reply buildAnswer(Message message)
-  {
-    return aReply().in(message.chat).withSticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC").build();
+    super(m -> m.textIsOneOf("test sticker"), new Sticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC"));
   }
 }
