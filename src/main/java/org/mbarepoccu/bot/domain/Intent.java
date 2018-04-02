@@ -6,9 +6,7 @@ import org.mbarepoccu.bot.infrastructure.resources.Reply;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
 import static org.mbarepoccu.bot.infrastructure.resources.Reply.Builder.aReply;
 
 public enum Intent
@@ -23,7 +21,7 @@ public enum Intent
       @Override
       public Reply buildAnswer(Message message)
       {
-        return buildReplyWithRandomText(message, "we dica", "we", "we mbare");
+        return aReply().in(message.chat).withRandomText("we dica", "we", "we mbare").build();
       }
   },
 
@@ -38,7 +36,7 @@ public enum Intent
     @Override
     public Reply buildAnswer(Message message)
     {
-      return buildReplyWithRandomText(message, "casa tu", "casa as usual...io");
+      return aReply().in(message.chat).withRandomText("casa tu", "casa as usual...io").build();
     }
   },
   PICCIONE {
@@ -79,7 +77,7 @@ public enum Intent
     @Override
     public Reply buildAnswer(Message message)
     {
-      return buildReplyWithRandomText(message, "eh sapessi mbare", "minchia se potessi parlare mbare", "sapessi");
+      return aReply().in(message.chat).withRandomText("eh sapessi mbare", "minchia se potessi parlare mbare", "sapessi").build();
     }
   },
   FIFA {
@@ -92,7 +90,7 @@ public enum Intent
     @Override
     public Reply buildAnswer(Message message)
     {
-      return buildReplyWithRandomText(message, "non mi va mbare. EA sports merda!", "naaaah fifa merda");
+      return aReply().in(message.chat).withRandomText("non mi va mbare. EA sports merda!", "naaaah fifa merda").build();
     }
   },
   NEWS {
@@ -105,7 +103,7 @@ public enum Intent
     @Override
     public Reply buildAnswer(Message message)
     {
-      return buildReplyWithRandomText(message, "nada tu");
+      return aReply().in(message.chat).withRandomText("nada tu").build();
     }
   },
   WHY {
@@ -118,7 +116,7 @@ public enum Intent
     @Override
     public Reply buildAnswer(Message message)
     {
-      return buildReplyWithRandomText(message, "eh sapessi mbare", "potessi parlare...");
+      return aReply().in(message.chat).withRandomText("eh sapessi mbare", "potessi parlare...").build();
     }
   },
   VALENCIA {
@@ -131,7 +129,7 @@ public enum Intent
     @Override
     public Reply buildAnswer(Message message)
     {
-      return buildReplyWithRandomText(message, "onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare");
+      return aReply().in(message.chat).withRandomText("onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare").build();
     }
   },
   TEST_GIF {
@@ -177,16 +175,6 @@ public enum Intent
   public abstract boolean canHandle(Message message);
   public abstract Reply buildAnswer(Message message);
 
-  private static Reply buildReplyWithRandomText(Message message, String... textuals)
-  {
-    return random(Stream.of(textuals).map(t -> aReply().in(message.chat).withText(t).build()).collect(toList()));
-  }
-
-  private static Reply random(List<Reply> randomResponses)
-  {
-    return randomResponses.get(RandomUtils.nextInt(0, randomResponses.size()));
-  }
-
   private static Reply buildReplyWithRandomImage(Message message)
   {
     final List<Reply> options = Arrays.asList(
@@ -194,6 +182,6 @@ public enum Intent
       aReply().in(message.chat).withSticker("CAADBAADgAIAAo-zWQNa5qKVuK6KiQI").build(),
       aReply().in(message.chat).withGIF("CgADBAADE58AAsgeZAc8eTz0lPWp0gI").build()
     );
-    return random(options);
+    return options.get(RandomUtils.nextInt(0, options.size()));
   }
 }

@@ -1,8 +1,11 @@
 package org.mbarepoccu.bot.infrastructure.resources;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.mbarepoccu.bot.domain.Chat;
+
+import java.util.Arrays;
 
 public class Reply {
   public String method = "sendMessage";
@@ -31,6 +34,14 @@ public class Reply {
     public Builder withText(String text) {
       this.method = "sendMessage";
       this.text = text;
+      this.sticker = null;
+      this.gif = null;
+      return this;
+    }
+
+    public Builder withRandomText(String... options) {
+      this.method = "sendMessage";
+      this.text = options[RandomUtils.nextInt(0, options.length)];
       this.sticker = null;
       this.gif = null;
       return this;
