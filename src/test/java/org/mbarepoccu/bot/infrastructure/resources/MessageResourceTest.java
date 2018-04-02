@@ -47,7 +47,7 @@ public class MessageResourceTest
   {
     final Reply reply = messageResource.handle(anIncomingMessage("valencia"));
 
-    assertTextReply(reply, "onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare");
+    assertTextReply(reply, "onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare", "valencia...cheers");
   }
 
   @Test

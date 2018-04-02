@@ -26,17 +26,17 @@ public class HandlerFactory
       new PredicateHandler(contains("piccione", "picciuni", "pizzuni"), text("non parlo di piccione con te mbare")),
       new PredicateHandler(is("test gif"), gif("CgADBAADE58AAsgeZAc8eTz0lPWp0gI")),
       new PredicateHandler(is("test sticker"), sticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC")),
-      new PredicateHandler(contains("valencia"), randomText("onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare")),
+      new PredicateHandler(contains("valencia"), randomText("onore a te mbare cheers", "minchia valencia mbare...sei troppo superiore", "non sono degno di parlare di piccione con te mbare", "valencia...cheers")),
       new PredicateHandler(is("we", "we mbare"), randomText("we dica", "we", "we mbare")),
       new PredicateHandler(contains("why"), randomText("eh sapessi mbare", "potessi parlare...", "eh sapessi", "sapessi")),
-      new PredicateHandler(sometimes(), randomContent(sticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC"), sticker("CAADBAADgAIAAo-zWQNa5qKVuK6KiQI"), gif("CgADBAADE58AAsgeZAc8eTz0lPWp0gI"))
+      new PredicateHandler(sometimes(), randomContent(sticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC"), sticker("CAADBAADgAIAAo-zWQNa5qKVuK6KiQI"), gif("CgADBAADE58AAsgeZAc8eTz0lPWp0gI"), text("immagino"), text("ne prendo atto"))
       )
     );
   }
 
   private static Predicate<Message> sometimes()
   {
-    return m -> RandomUtils.nextInt(0, 10) < 3;
+    return m -> RandomUtils.nextInt(0, 10) < 5;
   }
 
   private static Predicate<Message> contains(String... options){
