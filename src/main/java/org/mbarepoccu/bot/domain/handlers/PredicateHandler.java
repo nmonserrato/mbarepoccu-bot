@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 
 import static org.mbarepoccu.bot.infrastructure.resources.Reply.Builder.aReply;
 
-public abstract class PredicateHandler implements Handler
+public class PredicateHandler implements Handler
 {
   private final Predicate<Message> predicate;
   private final ContentProvider contentProvider;

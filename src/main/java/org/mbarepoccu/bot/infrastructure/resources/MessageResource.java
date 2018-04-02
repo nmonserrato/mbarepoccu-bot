@@ -2,12 +2,10 @@ package org.mbarepoccu.bot.infrastructure.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.mbarepoccu.bot.domain.Handler;
 import org.mbarepoccu.bot.domain.Message;
-import org.mbarepoccu.bot.domain.handlers.RandomHandler;
+import org.mbarepoccu.bot.domain.handlers.HandlerFactory;
 import org.mbarepoccu.bot.infrastructure.ObjectMapperFactory;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,25 +15,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
-
-import static java.util.stream.Collectors.toList;
 
 @RestController
 public class MessageResource
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(MessageResource.class);
   private final ObjectMapper objectMapper;
-  private final List<Handler> handlers = new Reflections("org.mbarepoccu.bot.domain.handlers")
-    .getSubTypesOf(Handler.class)
-    .stream()
-    .filter(c -> !c.getSimpleName().equals("RandomHandler"))
-    .filter(c -> !Modifier.isAbstract(c.getModifiers()))
-    .map(createInstance())
-    .collect(toList());
+  private final List<Handler> handlers = HandlerFactory.buildAll();
 
   private boolean withDelay = true;
 
@@ -49,7 +37,6 @@ public class MessageResource
   {
     this.objectMapper = ObjectMapperFactory.forRestResource();
     this.withDelay = withDelay;
-    this.handlers.add(new RandomHandler());
   }
 
   @RequestMapping(value = "/status", method = RequestMethod.GET)
@@ -71,7 +58,7 @@ public class MessageResource
       LOGGER.debug( "Found handler {}", handler);
       Reply reply = handler.map(i -> i.buildAnswer(message)).orElse(null);
 
-      LOGGER.info("Replying with {}", ToStringBuilder.reflectionToString(reply));
+      LOGGER.info("Replying with {}", reply);
       sleep();
       return reply;
     }
@@ -92,20 +79,6 @@ public class MessageResource
       catch (InterruptedException e) {
       }
     }
-  }
-
-  private static Function<Class<? extends Handler>, ? extends Handler> createInstance()
-  {
-    return aClass -> {
-      try
-      {
-        return aClass.newInstance();
-      }
-      catch (Exception e)
-      {
-        throw new RuntimeException(e);
-      }
-    };
   }
 }
 
