@@ -1,22 +1,12 @@
 package org.mbarepoccu.bot.domain.handlers;
 
-import org.mbarepoccu.bot.domain.Handler;
-import org.mbarepoccu.bot.domain.Message;
-import org.mbarepoccu.bot.infrastructure.resources.Reply;
+import org.mbarepoccu.bot.domain.reply.content.RandomContentProvider;
 
-import static org.mbarepoccu.bot.infrastructure.resources.Reply.Builder.aReply;
-
-public class WeHandler implements Handler
+public class WeHandler extends PredicateHandler
 {
-  @Override
-  public boolean canHandle(Message message)
+  public WeHandler()
   {
-    return message.textIsOneOf("we", "we mbare");
-  }
-
-  @Override
-  public Reply buildAnswer(Message message)
-  {
-    return aReply().in(message.chat).withRandomText("we dica", "we", "we mbare").build();
+    super(m -> m.textIsOneOf("we", "we mbare"),
+      RandomContentProvider.forText("we dica", "we", "we mbare"));
   }
 }

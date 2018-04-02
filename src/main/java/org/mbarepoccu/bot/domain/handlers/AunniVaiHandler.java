@@ -1,22 +1,12 @@
 package org.mbarepoccu.bot.domain.handlers;
 
-import org.mbarepoccu.bot.domain.Handler;
-import org.mbarepoccu.bot.domain.Message;
-import org.mbarepoccu.bot.infrastructure.resources.Reply;
+import org.mbarepoccu.bot.domain.reply.content.RandomContentProvider;
 
-import static org.mbarepoccu.bot.infrastructure.resources.Reply.Builder.aReply;
-
-public class AunniVaiHandler implements Handler
+public class AunniVaiHandler extends PredicateHandler
 {
-  @Override
-  public boolean canHandle(Message message)
+  public AunniVaiHandler()
   {
-    return message.containsOneOf("aunni vai");
-  }
-
-  @Override
-  public Reply buildAnswer(Message message)
-  {
-    return aReply().in(message.chat).withRandomText("eh sapessi mbare", "minchia se potessi parlare mbare", "sapessi").build();
+    super(m -> m.containsOneOf("aunni vai"),
+      RandomContentProvider.forText("eh sapessi mbare", "minchia se potessi parlare mbare", "sapessi"));
   }
 }

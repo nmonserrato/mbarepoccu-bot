@@ -1,22 +1,12 @@
 package org.mbarepoccu.bot.domain.handlers;
 
-import org.mbarepoccu.bot.domain.Handler;
-import org.mbarepoccu.bot.domain.Message;
-import org.mbarepoccu.bot.infrastructure.resources.Reply;
+import org.mbarepoccu.bot.domain.reply.content.RandomContentProvider;
 
-import static org.mbarepoccu.bot.infrastructure.resources.Reply.Builder.aReply;
-
-public class WhyHandler implements Handler
+public class WhyHandler extends PredicateHandler
 {
-  @Override
-  public boolean canHandle(Message message)
+  public WhyHandler()
   {
-    return message.containsOneOf("why");
-  }
-
-  @Override
-  public Reply buildAnswer(Message message)
-  {
-    return aReply().in(message.chat).withRandomText("eh sapessi mbare", "potessi parlare...", "eh sapessi", "sapessi").build();
+    super(m -> m.containsOneOf("why"),
+      RandomContentProvider.forText("eh sapessi mbare", "potessi parlare...", "eh sapessi", "sapessi"));
   }
 }
