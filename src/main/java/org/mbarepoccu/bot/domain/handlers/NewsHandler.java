@@ -1,22 +1,11 @@
 package org.mbarepoccu.bot.domain.handlers;
 
-import org.mbarepoccu.bot.domain.Handler;
-import org.mbarepoccu.bot.domain.Message;
-import org.mbarepoccu.bot.infrastructure.resources.Reply;
+import org.mbarepoccu.bot.domain.reply.content.TextContent;
 
-import static org.mbarepoccu.bot.infrastructure.resources.Reply.Builder.aReply;
-
-public class NewsHandler implements Handler
+public class NewsHandler extends PredicateHandler
 {
-  @Override
-  public boolean canHandle(Message message)
+  public NewsHandler()
   {
-    return message.containsOneOf("news");
-  }
-
-  @Override
-  public Reply buildAnswer(Message message)
-  {
-    return aReply().in(message.chat).withRandomText("nada tu").build();
+    super(m -> m.containsOneOf("news"), new TextContent("nada tu"));
   }
 }
