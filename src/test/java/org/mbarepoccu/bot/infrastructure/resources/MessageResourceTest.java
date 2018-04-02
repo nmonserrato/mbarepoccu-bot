@@ -30,8 +30,8 @@ public class MessageResourceTest
     final Reply reply1 = messageResource.handle(anIncomingMessage("we aunni si"));
     final Reply reply2 = messageResource.handle(anIncomingMessage("aunni su"));
 
-    assertTextReply(reply1, "casa tu", "casa as usual...io");
-    assertTextReply(reply2, "casa tu", "casa as usual...io");
+    assertTextReply(reply1, "casa tu", "casa...io", "casa as usual tu");
+    assertTextReply(reply2, "casa tu", "casa...io", "casa as usual tu");
   }
 
   @Test

@@ -4,9 +4,14 @@ public class Sticker implements Content
 {
   private final String fileId;
 
-  public Sticker(String fileId)
+  private Sticker(String fileId)
   {
     this.fileId = fileId;
+  }
+
+  public static Sticker sticker(String fileId)
+  {
+    return new Sticker(fileId);
   }
 
   @Override

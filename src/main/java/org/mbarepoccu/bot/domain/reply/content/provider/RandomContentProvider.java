@@ -20,7 +20,7 @@ public class RandomContentProvider implements ContentProvider
 
   public static RandomContentProvider randomText(String... options){
     final List<Content> contentOptions = Stream.of(options)
-      .map(Text::new)
+      .map(Text::text)
       .collect(toList());
 
     return new RandomContentProvider(contentOptions);

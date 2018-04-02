@@ -4,9 +4,14 @@ public class Text implements Content
 {
   private final String text;
 
-  public Text(String text)
+  private Text(String text)
   {
     this.text = text;
+  }
+
+  public static Text text(String text)
+  {
+    return new Text(text);
   }
 
   @Override
