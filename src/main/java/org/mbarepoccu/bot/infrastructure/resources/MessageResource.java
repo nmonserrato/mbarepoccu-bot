@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.mbarepoccu.bot.domain.Intent;
 import org.mbarepoccu.bot.domain.Message;
 import org.mbarepoccu.bot.infrastructure.ObjectMapperFactory;
 import org.slf4j.Logger;
@@ -90,9 +91,15 @@ public class MessageResource
 
   private Reply buildReplyForMessage(Message message)
   {
-    if (StringUtils.equalsIgnoreCase(message.text, "we"))
+    final Reply reply = Stream.of(Intent.values())
+      .filter(i -> i.canHandle(message))
+      .findAny()
+      .map(i -> i.buildAnswer(message))
+      .orElse(null);
+
+    if (reply != null)
     {
-      return buildReplyWithRandomText(message, "we dica", "we", "we mbare");
+      return reply;
     }
 
     if (StringUtils.containsIgnoreCase(message.text, "aunni si") ||

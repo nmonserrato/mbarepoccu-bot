@@ -19,11 +19,9 @@ public class MessageResourceTest
   @Test
   public void we()
   {
-//    expectTextReply("we dica", "we", "we mbare");
-
     final Reply reply = messageResource.handle(anIncomingMessage("we"));
 
-//    assertTextReply(reply, "we dica", "we", "we mbare");
+    assertTextReply(reply, "we dica", "we", "we mbare");
   }
 
   @Test
