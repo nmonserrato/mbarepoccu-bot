@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.mbarepoccu.bot.domain.Chat;
 
-class Reply {
+public class Reply {
   public String method = "sendMessage";
   public String chat_id;
   public String text;
@@ -17,7 +17,7 @@ class Reply {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 
-  static class Builder {
+  public static class Builder {
     private Chat chat;
     private String method;
     private String text;
