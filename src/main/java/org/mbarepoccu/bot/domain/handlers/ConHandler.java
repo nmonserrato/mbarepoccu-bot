@@ -1,6 +1,5 @@
 package org.mbarepoccu.bot.domain.handlers;
 
-import org.apache.commons.lang3.StringUtils;
 import org.mbarepoccu.bot.domain.Handler;
 import org.mbarepoccu.bot.domain.Message;
 import org.mbarepoccu.bot.infrastructure.resources.Reply;
@@ -12,9 +11,7 @@ public class ConHandler implements Handler
   @Override
   public boolean canHandle(Message message)
   {
-    return StringUtils.containsIgnoreCase(message.text, "con chi") ||
-      StringUtils.equalsIgnoreCase(message.text, "con") ||
-      StringUtils.equalsIgnoreCase(message.text, "con?");
+    return message.textIsOneOf("con", "con?", "con chi", "con chi?", "con chi esci", "con chi esci?");
   }
 
   @Override

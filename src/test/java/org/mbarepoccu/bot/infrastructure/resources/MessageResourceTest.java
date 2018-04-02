@@ -91,7 +91,7 @@ public class MessageResourceTest
   {
     final Reply reply = messageResource.handle(anIncomingMessage("why"));
 
-    assertTextReply(reply, "eh sapessi mbare", "potessi parlare...");
+    assertTextReply(reply, "eh sapessi mbare", "potessi parlare...", "eh sapessi", "sapessi");
   }
 
   @Test
