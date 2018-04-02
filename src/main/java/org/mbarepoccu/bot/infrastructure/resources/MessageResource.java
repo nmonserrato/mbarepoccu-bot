@@ -39,11 +39,6 @@ public class MessageResource
     this.withDelay = withDelay;
   }
 
-  @RequestMapping(value = "/status", method = RequestMethod.GET)
-  public String status() {
-    return "mbarepoccu-bot: 1.0.0-SNAPSHOT";
-  }
-
   @RequestMapping(value = "/new-message", method = RequestMethod.POST)
   public Reply handle(@RequestBody String string) {
     LOGGER.info("Message Received with body {}", string);
@@ -55,10 +50,11 @@ public class MessageResource
         return null;
 
       final Optional<Handler> handler = handlers.stream().filter(i -> i.canHandle(message)).findAny();
-      LOGGER.debug( "Found handler {}", handler);
-      Reply reply = handler.map(i -> i.buildAnswer(message)).orElse(null);
+      LOGGER.debug("Handler is -> {}", handler);
 
+      Reply reply = handler.map(i -> i.buildAnswer(message)).orElse(null);
       LOGGER.info("Replying with {}", reply);
+
       sleep();
       return reply;
     }
@@ -77,6 +73,7 @@ public class MessageResource
         Thread.sleep(delay);
       }
       catch (InterruptedException e) {
+        LOGGER.info("Interrupted while sleeping! WTF!", e);
       }
     }
   }

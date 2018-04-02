@@ -4,7 +4,6 @@ import org.mbarepoccu.bot.domain.Handler;
 import org.mbarepoccu.bot.domain.Message;
 import org.mbarepoccu.bot.domain.reply.content.Content;
 import org.mbarepoccu.bot.domain.reply.content.provider.ContentProvider;
-import org.mbarepoccu.bot.domain.reply.content.provider.FixedContentProvider;
 import org.mbarepoccu.bot.infrastructure.resources.Reply;
 
 import java.util.function.Predicate;
@@ -19,7 +18,7 @@ public class PredicateHandler implements Handler
   protected PredicateHandler(Predicate<Message> predicate, Content content)
   {
     this.predicate = predicate;
-    this.contentProvider = new FixedContentProvider(content);
+    this.contentProvider = () -> content;
   }
 
   protected PredicateHandler(Predicate<Message> predicate, ContentProvider contentProvider)
