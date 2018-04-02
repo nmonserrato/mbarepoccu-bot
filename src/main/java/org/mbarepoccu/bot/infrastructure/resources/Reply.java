@@ -5,8 +5,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.mbarepoccu.bot.domain.Chat;
 
-import java.util.Arrays;
-
 public class Reply {
   public String method = "sendMessage";
   public String chat_id;
