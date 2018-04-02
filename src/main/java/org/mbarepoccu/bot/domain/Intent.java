@@ -168,20 +168,15 @@ public enum Intent
     @Override
     public Reply buildAnswer(Message message)
     {
-      return buildReplyWithRandomImage(message);
+      final List<Reply> options = Arrays.asList(
+        aReply().in(message.chat).withSticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC").build(),
+        aReply().in(message.chat).withSticker("CAADBAADgAIAAo-zWQNa5qKVuK6KiQI").build(),
+        aReply().in(message.chat).withGIF("CgADBAADE58AAsgeZAc8eTz0lPWp0gI").build()
+      );
+      return options.get(RandomUtils.nextInt(0, options.size()));
     }
   };
 
   public abstract boolean canHandle(Message message);
   public abstract Reply buildAnswer(Message message);
-
-  private static Reply buildReplyWithRandomImage(Message message)
-  {
-    final List<Reply> options = Arrays.asList(
-      aReply().in(message.chat).withSticker("CAADBQADuQEAAukKyAMFe9CCAAH2HHcC").build(),
-      aReply().in(message.chat).withSticker("CAADBAADgAIAAo-zWQNa5qKVuK6KiQI").build(),
-      aReply().in(message.chat).withGIF("CgADBAADE58AAsgeZAc8eTz0lPWp0gI").build()
-    );
-    return options.get(RandomUtils.nextInt(0, options.size()));
-  }
 }
