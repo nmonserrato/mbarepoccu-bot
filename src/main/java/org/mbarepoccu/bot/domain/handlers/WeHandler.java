@@ -7,6 +7,6 @@ public class WeHandler extends PredicateHandler
   public WeHandler()
   {
     super(m -> m.textIsOneOf("we", "we mbare"),
-      RandomContentProvider.forText("we dica", "we", "we mbare"));
+      RandomContentProvider.randomText("we dica", "we", "we mbare"));
   }
 }

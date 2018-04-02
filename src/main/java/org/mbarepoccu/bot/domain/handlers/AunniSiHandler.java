@@ -7,6 +7,6 @@ public class AunniSiHandler extends PredicateHandler
   public AunniSiHandler()
   {
     super(m -> m.containsOneOf("aunni si", "aunni su"),
-      RandomContentProvider.forText("casa tu", "casa as usual...io"));
+      RandomContentProvider.randomText("casa tu", "casa as usual...io"));
   }
 }

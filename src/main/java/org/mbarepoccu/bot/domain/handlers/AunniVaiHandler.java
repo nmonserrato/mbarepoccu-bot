@@ -7,6 +7,6 @@ public class AunniVaiHandler extends PredicateHandler
   public AunniVaiHandler()
   {
     super(m -> m.containsOneOf("aunni vai"),
-      RandomContentProvider.forText("eh sapessi mbare", "minchia se potessi parlare mbare", "sapessi"));
+      RandomContentProvider.randomText("eh sapessi mbare", "minchia se potessi parlare mbare", "sapessi"));
   }
 }

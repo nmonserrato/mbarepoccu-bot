@@ -7,6 +7,6 @@ public class WhyHandler extends PredicateHandler
   public WhyHandler()
   {
     super(m -> m.containsOneOf("why"),
-      RandomContentProvider.forText("eh sapessi mbare", "potessi parlare...", "eh sapessi", "sapessi"));
+      RandomContentProvider.randomText("eh sapessi mbare", "potessi parlare...", "eh sapessi", "sapessi"));
   }
 }
